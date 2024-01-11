@@ -12,7 +12,6 @@ User.create = (newUser, result) => {
         if(err) throw err;
         console.log(rows);
     })
-
     console.log("유저 생성 : ", { ...newUser })
     result(null, {...newUser});
 }
