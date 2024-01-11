@@ -16,4 +16,21 @@ User.create = (newUser, result) => {
     result(null, {...newUser});
 }
 
+User.emailDuplicateCheck = (email, result) => {
+    sql.query(`SELECT * FROM user WHERE email = "${email}";`, (err, res) => {
+        if (err) {
+            console.log("EMAIL_DUPLICATE_CHECK", err);
+            result(err, null);
+            return false;
+        }
+
+        if (res.length) {
+            result({ kind: "DUPLICATE_EMAIL" }, null)
+            return false;
+        }
+        result({ kind: "DUPLICATE_EMAILㄴ" }, null)
+        // result(null, true)
+    })
+}
+
 module.exports = User;
