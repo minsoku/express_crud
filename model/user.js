@@ -7,7 +7,6 @@ const User = function(user) {
 }
 
 User.create = (newUser, result) => {
-    // sql.query(`INSERT INTO user (email, nickname, password) VALUES (${newUser.email}, ${newUser.nickname}, ${newUser.password})`, (err, rows) => {
     sql.query("INSERT INTO user SET ?", newUser, (err, rows) => {
         if(err) throw err;
         console.log(rows);
@@ -16,8 +15,8 @@ User.create = (newUser, result) => {
     result(null, {...newUser});
 }
 
-User.emailDuplicateCheck = (email, result) => {
-    sql.query(`SELECT * FROM user WHERE email = "${email}";`, (err, res) => {
+User.emailDuplicateCheck = (type, value , result) => {
+    sql.query(`SELECT * FROM user WHERE ${type} = "${value}";`, (err, res) => {
         if (err) {
             console.log("EMAIL_DUPLICATE_CHECK", err);
             result(err, null);
@@ -28,8 +27,7 @@ User.emailDuplicateCheck = (email, result) => {
             result({ kind: "DUPLICATE_EMAIL" }, null)
             return false;
         }
-        result({ kind: "DUPLICATE_EMAILㄴ" }, null)
-        // result(null, true)
+        result(null, true)
     })
 }
 
