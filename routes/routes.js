@@ -3,6 +3,7 @@ module.exports = app => {
     const user = require('../controller/user');
     console.log('routes')
     router.post('/user/signup', user.createUser);
+    router.post('/user/login', user.loginUser)
     router.post('/user/duplicate-check', user.checkDuplicate);
 
     app.use('/', router);
