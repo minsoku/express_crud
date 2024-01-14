@@ -8,13 +8,17 @@ const User = function(user) {
     this.password = user.password;
 }
 
-User.create = (newUser, result) => {
-    sql.query("INSERT INTO user SET ?", newUser, (err, rows) => {
-        if(err) throw err;
-        console.log(rows);
+User.create = async (newUser) => {
+    return new Promise((resolve, reject) => {
+        sql.query("INSERT INTO user SET ?", newUser, (err, res) => {
+            if(err) {
+                console.log("CREATE_ERROR", err)
+                reject({kind: "CREATE_ERROR"});
+                return;
+            }
+            resolve(true);
+        })
     })
-    console.log("유저 생성 : ", { ...newUser })
-    result(null, {...newUser});
 }
 
 User.duplicateCheck = (type, value) => {
@@ -25,7 +29,7 @@ User.duplicateCheck = (type, value) => {
                 reject(err);
                 return;
             }
-            if (!res.length) {
+            if (res.length) {
                 reject({ kind: "DUPLICATE_EMAIL" });
                 return;
             }
@@ -47,7 +51,6 @@ User.login = (email, password) => {
                 return;
             }
             const user = res[0];
-            console.log(user)
 
             bcrypt.compare(password, user.password, (err, result) => {
                 if (err) {
